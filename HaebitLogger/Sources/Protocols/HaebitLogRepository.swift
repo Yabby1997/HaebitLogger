@@ -10,5 +10,5 @@ import Foundation
 
 public protocol HaebitLogRepository {
     func logs() async throws -> [HaebitLog]
-    func save(logs: [HaebitLog]) async throws
+    func save(log: HaebitLog) async throws
 }
