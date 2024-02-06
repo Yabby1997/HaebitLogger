@@ -15,38 +15,39 @@ public class HaebitLogger {
         self.repository = repository
     }
     
-    func logs() async throws -> [HaebitLog] {
-        []
+    public func logs() async throws -> [HaebitLog] {
+        try await repository.logs()
     }
     
-    func logs(near coordinate: HaebitCoordinate, range: Double) async throws -> [HaebitLog] {
-        []
+    public func logs(near coordinate: HaebitCoordinate, range distance: Double) async throws -> [HaebitLog] {
+        try await repository.logs().filter { coordinate.distance(to: $0.coordinate) <= distance }
     }
     
-    func logs(iso: UInt16) async throws -> [HaebitLog] {
-        []
+    public func logs(iso: UInt16) async throws -> [HaebitLog] {
+        try await repository.logs().filter { $0.iso == iso }
     }
     
-    func logs(shutterSpeed: Float) async throws -> [HaebitLog] {
-        []
+    public func logs(shutterSpeed: Float) async throws -> [HaebitLog] {
+        try await repository.logs().filter { $0.shutterSpeed == shutterSpeed }
     }
     
-    func logs(aperture: Float) async throws -> [HaebitLog] {
-        []
+    public func logs(aperture: Float) async throws -> [HaebitLog] {
+        try await repository.logs().filter { $0.aperture == aperture }
     }
     
-    func logs(date: Date) async throws -> [HaebitLog] {
-        []
+    public func logs(date: Date) async throws -> [HaebitLog] {
+        try await repository.logs().filter { Calendar.current.isDate($0.date, inSameDayAs: date) }
     }
     
-    func logs(from: Date, to: Date) async throws -> [HaebitLog] {
-        []
+    public func logs(from: Date, to: Date) async throws -> [HaebitLog] {
+        try await repository.logs().filter { DateInterval(start: from, end: to).contains($0.date) }
     }
     
-    func logs(containing memo: String) async throws -> [HaebitLog] {
-        []
+    public func logs(containing memo: String) async throws -> [HaebitLog] {
+        try await repository.logs().filter { $0.memo.lowercased().contains(memo.lowercased()) }
     }
     
-    func save(log: HaebitLog) async throws {}
-    func save(logs: [HaebitLog]) async throws {}
+    public func save(log: HaebitLog) async throws {
+        try await repository.save(log: log)
+    }
 }
