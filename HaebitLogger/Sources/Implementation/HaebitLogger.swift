@@ -11,6 +11,10 @@ import Foundation
 public class HaebitLogger {
     private let repository: HaebitLogRepository
     
+    /// Initializes new ``HaebitLogger`` instance.
+    ///
+    /// - Parameters:
+    ///     - repository: A ``HaebitLogRepository`` instance which represents data persistence for ``HaebitLog``s to be used.
     public init(repository: HaebitLogRepository) {
         self.repository = repository
     }
@@ -49,5 +53,9 @@ public class HaebitLogger {
     
     public func save(log: HaebitLog) async throws {
         try await repository.save(log: log)
+    }
+    
+    public func remove(log: HaebitLog) async throws {
+        try await repository.remove(log: log)
     }
 }

@@ -97,6 +97,10 @@ final class HaebitLoggerTests: XCTestCase {
         func save(log: HaebitLog) async throws {
             data.append(log)
         }
+        
+        func remove(log: HaebitLog) async throws {
+            data.removeAll { $0 == log }
+        }
     }
     
     func testLogs() async throws {
@@ -178,5 +182,19 @@ final class HaebitLoggerTests: XCTestCase {
         )
         let logs2 = try await logger.logs()
         XCTAssertEqual(logs2.count, 7)
+    }
+    
+    func testRemove() async throws {
+        let repository = MockRepository()
+        let logger = HaebitLogger(repository: repository)
+        let logs1 = try await logger.logs()
+        XCTAssertEqual(logs1.count, 6)
+        guard let log = repository.data.first else {
+            XCTFail()
+            return
+        }
+        try await logger.remove(log: log)
+        let logs2 = try await logger.logs()
+        XCTAssertEqual(logs2.count, 5)
     }
 }
