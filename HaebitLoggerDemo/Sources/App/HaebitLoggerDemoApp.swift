@@ -7,12 +7,13 @@
 //
 
 import SwiftUI
+import CoreData
 
 @main
 struct HaebitLoggerDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HaebitLogListView(viewModel: HaebitLogListViewModel())
         }
     }
 }
