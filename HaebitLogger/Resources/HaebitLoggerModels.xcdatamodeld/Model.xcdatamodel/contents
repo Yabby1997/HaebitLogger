@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23B81" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="NSManagedHaebitCoordinate" representedClassName="NSManagedHaebitCoordinate" syncable="YES" codeGenerationType="class">
+        <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="NSManagedHaebitImage" representedClassName="NSManagedHaebitImage" syncable="YES" codeGenerationType="class">
+        <attribute name="photo" attributeType="URI"/>
+        <attribute name="video" optional="YES" attributeType="URI"/>
+    </entity>
+    <entity name="NSManagedHaebitLog" representedClassName="NSManagedHaebitLog" syncable="YES" codeGenerationType="class">
+        <attribute name="aperture" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="iso" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="memo" attributeType="String"/>
+        <attribute name="shutterSpeed" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="coordinate" maxCount="1" deletionRule="Nullify" destinationEntity="NSManagedHaebitCoordinate"/>
+        <relationship name="image" maxCount="1" deletionRule="Nullify" destinationEntity="NSManagedHaebitImage"/>
+    </entity>
+</model>

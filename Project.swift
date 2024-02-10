@@ -8,6 +8,7 @@ let targets: [Target] = [
         bundleId: "com.seunghun.haebitlogger",
         deploymentTarget: .iOS(targetVersion: "15.0", devices: [.iphone]),
         sources: ["HaebitLogger/Sources/**"],
+        resources: ["HaebitLogger/Resources/**"],
         dependencies: []
     ),
     Target(

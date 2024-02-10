@@ -19,7 +19,7 @@ public struct HaebitLog: Hashable {
     public let memo: String
     
     public init(
-        id: UUID,
+        id: UUID = UUID(),
         date: Date,
         coordinate: HaebitCoordinate,
         image: HaebitImage,
