@@ -32,19 +32,29 @@ public final class DefaultHaebitLogRepository: HaebitLogRepository {
     }
     
     public func save(log: HaebitLog) async throws {
-        guard let managedObject = log.managedObject(with: context) else {
-            return
+        if let existingManagedObject = try fetch(with: log.id) {
+            existingManagedObject.override(with: context, haebitLog: log)
+        } else {
+            guard let newManagedObject = log.managedObject(with: context) else {
+                return
+            }
+            context.insert(newManagedObject)
         }
-        context.insert(managedObject)
         try context.save()
     }
     
     public func remove(log: HaebitLog) async throws {
-        guard let managedObject = log.managedObject(with: context) else {
+        guard let managedObject = try fetch(with: log.id) else {
             return
         }
         context.delete(managedObject)
         try context.save()
+    }
+    
+    private func fetch(with id: UUID) throws -> NSManagedHaebitLog? {
+        let fetchRequest: NSFetchRequest<NSManagedHaebitLog> = NSManagedHaebitLog.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        return try context.fetch(fetchRequest).first
     }
 }
 
@@ -68,6 +78,16 @@ extension NSManagedHaebitLog {
             aperture: aperture,
             memo: memo
         )
+    }
+    
+    fileprivate func override(with context: NSManagedObjectContext,  haebitLog: HaebitLog) {
+        date = haebitLog.date
+        coordinate = haebitLog.coordinate.managedObject(with: context)
+        image = haebitLog.image.managedObject(with: context)
+        iso = Int16(bitPattern: haebitLog.iso)
+        shutterSpeed = haebitLog.shutterSpeed
+        aperture = haebitLog.aperture
+        memo = haebitLog.memo
     }
 }
 
@@ -99,7 +119,7 @@ extension HaebitLog {
         managedObject.id = id
         managedObject.aperture = aperture
         managedObject.date = date
-        managedObject.iso = Int16(iso)
+        managedObject.iso = Int16(bitPattern: iso)
         managedObject.memo = memo
         managedObject.shutterSpeed = shutterSpeed
         managedObject.coordinate = coordinate.managedObject(with: context)
