@@ -9,29 +9,11 @@
 import Foundation
 import HaebitLogger
 
-protocol NewLogViewModel: AnyObject, ObservableObject {
-    var newDate: Date { get set }
-    var newIso: UInt16 { get set }
-    var newShutterSpeed: Float { get set }
-    var newAperture: Float { get set }
-    var newMemo: String { get set }
-    
-    func didTapClose()
-    func didTapAdd()
-}
-
-final class HaebitLogListViewModel: ObservableObject, NewLogViewModel {
+final class HaebitLogListViewModel: ObservableObject {
     private let logger = HaebitLogger(repository: DefaultHaebitLogRepository())
     
-    @Published var isLoading = false
     @Published var isAddingNewLog = false
     @Published var logs: [HaebitLog] = []
-    
-    @Published var newDate = Date()
-    @Published var newIso: UInt16 = .zero
-    @Published var newShutterSpeed: Float = .zero
-    @Published var newAperture: Float = .zero
-    @Published var newMemo: String = ""
     
     func onAppear() {
         Task {
@@ -43,44 +25,40 @@ final class HaebitLogListViewModel: ObservableObject, NewLogViewModel {
         isAddingNewLog = true
     }
     
-    func didTapClose() {
-        isAddingNewLog = false
+    func didSelectRemove(of index: Int) {
+        Task {
+            try? await logger.remove(log: logs[index])
+            try? await reload()
+        }
     }
     
-    func didTapAdd() {
-        Task {
-            try? await logger.save(
-                log: HaebitLog(
-                    date: newDate,
-                    coordinate: .random(),
-                    image: HaebitImage(photo: URL(string: "https://demo.com")!, video: nil),
-                    iso: newIso,
-                    shutterSpeed: newShutterSpeed,
-                    aperture: newAperture,
-                    memo: newMemo
-                )
-            )
-            try? await reload()
-            Task { @MainActor in
-                isAddingNewLog = false
+    func newLogViewModel() -> HaebitNewLogViewModel {
+        HaebitNewLogViewModel { [weak self] newLog in
+            Task { [weak self] in
+                try? await self?.logger.save(log: newLog)
+                try? await self?.reload()
+                Task { @MainActor [weak self] in
+                    self?.isAddingNewLog = false
+                }
+            }
+        } closeClosure: { [weak self] in
+            self?.isAddingNewLog = false
+        }
+    }
+    
+    func existingLogViewModel(for log: HaebitLog) -> HaebitExistingLogViewModel {
+        HaebitExistingLogViewModel(original: log) { [weak self] editedLog in
+            Task { [weak self] in
+                try? await self?.logger.save(log: editedLog)
+                try? await self?.reload()
             }
         }
     }
     
     private func reload() async throws {
+        let logs = (try? await logger.logs()) ?? []
         Task { @MainActor in
-            isLoading = true
-        }
-        do {
-            let logs = try await logger.logs()
-            Task { @MainActor in
-                self.logs = logs
-                self.isLoading = false
-            }
-        } catch {
-            Task { @MainActor in
-                self.isLoading = false
-            }
+            self.logs = logs
         }
     }
 }

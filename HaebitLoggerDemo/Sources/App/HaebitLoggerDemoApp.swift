@@ -6,8 +6,8 @@
 //  Copyright © 2024 seunghun. All rights reserved.
 //
 
+import HaebitLogger
 import SwiftUI
-import CoreData
 
 @main
 struct HaebitLoggerDemoApp: App {

@@ -12,32 +12,31 @@ struct HaebitLogListView: View {
     @StateObject var viewModel: HaebitLogListViewModel
     
     var body: some View {
-        ZStack {
-            NavigationView {
-                List {
-                    ForEach(viewModel.logs, id: \.id) { log in
-                        NavigationLink {
-                            Text(log.memo)
-                        } label: {
-                            Text(log.date.description)
-                        }
+        NavigationView {
+            List {
+                ForEach(viewModel.logs, id: \.id) { log in
+                    NavigationLink {
+                        HaebitExistingLogView(viewModel: viewModel.existingLogViewModel(for: log))
+                    } label: {
+                        Text(log.date.description)
                     }
                 }
-                .navigationTitle("Logs")
-                .toolbar {
-                    Button(action: viewModel.didTapAddButton) {
-                        Image(systemName: "plus")
-                    }
+                .onDelete { indexSet in
+                    guard let index = indexSet.first else { return }
+                    viewModel.didSelectRemove(of: index)
                 }
             }
-            .fullScreenCover(isPresented: $viewModel.isAddingNewLog) {
-                NewLogView(viewModel: viewModel)
-            }
-            if viewModel.isLoading {
-                LoadingIndicatorView()
+            .navigationTitle("Logs")
+            .toolbar {
+                Button(action: viewModel.didTapAddButton) {
+                    Image(systemName: "plus")
+                }
             }
         }
         .onAppear(perform: viewModel.onAppear)
+        .fullScreenCover(isPresented: $viewModel.isAddingNewLog) {
+            HaebitNewLogView(viewModel: viewModel.newLogViewModel())
+        }
     }
 }
 
