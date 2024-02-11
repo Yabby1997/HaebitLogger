@@ -62,7 +62,6 @@ extension NSManagedHaebitLog {
     fileprivate var haebitLog: HaebitLog? {
         guard let id,
               let date,
-              let coordinate = coordinate?.haebitCoordinate,
               let image = image?.haebitImage,
               let memo else {
             return nil
@@ -71,8 +70,9 @@ extension NSManagedHaebitLog {
         return .init(
             id: id,
             date: date,
-            coordinate: coordinate,
+            coordinate: coordinate?.haebitCoordinate,
             image: image,
+            focalLength: UInt16(bitPattern: focalLength),
             iso: UInt16(bitPattern: iso),
             shutterSpeed: shutterSpeed,
             aperture: aperture,
@@ -82,8 +82,9 @@ extension NSManagedHaebitLog {
     
     fileprivate func override(with context: NSManagedObjectContext,  haebitLog: HaebitLog) {
         date = haebitLog.date
-        coordinate = haebitLog.coordinate.managedObject(with: context)
+        coordinate = haebitLog.coordinate?.managedObject(with: context)
         image = haebitLog.image.managedObject(with: context)
+        focalLength = Int16(bitPattern: haebitLog.focalLength)
         iso = Int16(bitPattern: haebitLog.iso)
         shutterSpeed = haebitLog.shutterSpeed
         aperture = haebitLog.aperture
@@ -119,10 +120,11 @@ extension HaebitLog {
         managedObject.id = id
         managedObject.aperture = aperture
         managedObject.date = date
+        managedObject.focalLength = Int16(bitPattern: focalLength)
         managedObject.iso = Int16(bitPattern: iso)
         managedObject.memo = memo
         managedObject.shutterSpeed = shutterSpeed
-        managedObject.coordinate = coordinate.managedObject(with: context)
+        managedObject.coordinate = coordinate?.managedObject(with: context)
         managedObject.image = image.managedObject(with: context)
         return managedObject
     }

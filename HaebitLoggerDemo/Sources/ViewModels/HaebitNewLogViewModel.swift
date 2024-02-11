@@ -11,6 +11,7 @@ import HaebitLogger
 
 final class HaebitNewLogViewModel: ObservableObject {
     @Published var date = Date()
+    @Published var focalLength: UInt16 = .zero
     @Published var iso: UInt16 = .zero
     @Published var shutterSpeed: Float = .zero
     @Published var aperture: Float = .zero
@@ -32,6 +33,7 @@ final class HaebitNewLogViewModel: ObservableObject {
                 date: date,
                 coordinate: .random(),
                 image: HaebitImage(photo: URL(string: "https://demo.com")!, video: nil),
+                focalLength: focalLength,
                 iso: iso,
                 shutterSpeed: shutterSpeed,
                 aperture: aperture,

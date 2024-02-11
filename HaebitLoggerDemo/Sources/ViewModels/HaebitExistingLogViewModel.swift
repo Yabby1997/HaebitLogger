@@ -11,17 +11,19 @@ import HaebitLogger
 
 final class HaebitExistingLogViewModel: ObservableObject {
     @Published var isEditingMode = false
-    @Published var date = Date()
-    @Published var iso: UInt16 = .zero
-    @Published var shutterSpeed: Float = .zero
-    @Published var aperture: Float = .zero
-    @Published var memo: String = ""
+    @Published var date: Date
+    @Published var focalLength: UInt16
+    @Published var iso: UInt16
+    @Published var shutterSpeed: Float
+    @Published var aperture: Float
+    @Published var memo: String
     let original: HaebitLog
     let dismissClosure: (HaebitLog) -> Void
     
     init(original: HaebitLog, dismissClosure: @escaping (HaebitLog) -> Void) {
         self.original = original
         self.date = original.date
+        self.focalLength = original.focalLength
         self.iso = original.iso
         self.shutterSpeed = original.shutterSpeed
         self.aperture = original.aperture
@@ -40,6 +42,7 @@ final class HaebitExistingLogViewModel: ObservableObject {
                 date: date,
                 coordinate: original.coordinate,
                 image: original.image,
+                focalLength: focalLength,
                 iso: iso,
                 shutterSpeed: shutterSpeed,
                 aperture: aperture,

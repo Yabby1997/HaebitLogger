@@ -11,8 +11,9 @@ import Foundation
 public struct HaebitLog: Hashable {
     public let id: UUID
     public let date: Date
-    public let coordinate: HaebitCoordinate
+    public let coordinate: HaebitCoordinate?
     public let image: HaebitImage
+    public let focalLength: UInt16
     public let iso: UInt16
     public let shutterSpeed: Float
     public let aperture: Float
@@ -21,8 +22,9 @@ public struct HaebitLog: Hashable {
     public init(
         id: UUID = UUID(),
         date: Date,
-        coordinate: HaebitCoordinate,
+        coordinate: HaebitCoordinate?,
         image: HaebitImage,
+        focalLength: UInt16,
         iso: UInt16,
         shutterSpeed: Float,
         aperture: Float,
@@ -32,6 +34,7 @@ public struct HaebitLog: Hashable {
         self.date = date
         self.coordinate = coordinate
         self.image = image
+        self.focalLength = focalLength
         self.iso = iso
         self.shutterSpeed = shutterSpeed
         self.aperture = aperture

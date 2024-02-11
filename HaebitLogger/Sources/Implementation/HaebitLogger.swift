@@ -24,7 +24,14 @@ public class HaebitLogger {
     }
     
     public func logs(near coordinate: HaebitCoordinate, range distance: Double) async throws -> [HaebitLog] {
-        try await repository.logs().filter { coordinate.distance(to: $0.coordinate) <= distance }
+        try await repository.logs().filter { log in
+            guard let logCoordinate = log.coordinate else { return false }
+            return coordinate.distance(to: logCoordinate) <= distance
+        }
+    }
+    
+    public func logs(focalLength: UInt16) async throws -> [HaebitLog] {
+        try await repository.logs().filter { $0.focalLength == focalLength }
     }
     
     public func logs(iso: UInt16) async throws -> [HaebitLog] {

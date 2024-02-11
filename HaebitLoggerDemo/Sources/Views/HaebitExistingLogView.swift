@@ -16,6 +16,18 @@ struct HaebitExistingLogView: View {
         List {
             DatePicker("Date", selection: $viewModel.date)
             HStack {
+                Text("FocalLength")
+                TextField(
+                    "FocalLength",
+                    text: .init(
+                        get: { "\(viewModel.focalLength)" },
+                        set: { viewModel.focalLength = UInt16($0) ?? .zero }
+                    )
+                )
+                .multilineTextAlignment(.trailing)
+                .keyboardType(.numberPad)
+            }
+            HStack {
                 Text("ISO")
                 TextField(
                     "ISO",
@@ -61,6 +73,7 @@ struct HaebitExistingLogView: View {
                 date: Date(),
                 coordinate: .random(),
                 image: HaebitImage(photo: URL(string: "https://demo.com")!, video: nil),
+                focalLength: .zero,
                 iso: .zero,
                 shutterSpeed: .zero,
                 aperture: .zero,

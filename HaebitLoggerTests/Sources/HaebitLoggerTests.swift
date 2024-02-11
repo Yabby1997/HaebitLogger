@@ -26,6 +26,7 @@ final class HaebitLoggerTests: XCTestCase {
                     date: Date(timeIntervalSince1970: 1706972400),
                     coordinate: sanFrancisco,
                     image: image,
+                    focalLength: 28,
                     iso: 100,
                     shutterSpeed: 30,
                     aperture: 2,
@@ -36,6 +37,7 @@ final class HaebitLoggerTests: XCTestCase {
                     date: Date(timeIntervalSince1970: 1706764329),
                     coordinate: sanFrancisco1,
                     image: image,
+                    focalLength: 50,
                     iso: 100,
                     shutterSpeed: 60,
                     aperture: 1.4,
@@ -46,6 +48,7 @@ final class HaebitLoggerTests: XCTestCase {
                     date: Date(timeIntervalSince1970: 1707220190),
                     coordinate: losAngeles,
                     image: image,
+                    focalLength: 28,
                     iso: 400,
                     shutterSpeed: 15,
                     aperture: 11,
@@ -56,6 +59,7 @@ final class HaebitLoggerTests: XCTestCase {
                     date: Date(timeIntervalSince1970: 1707210190),
                     coordinate: losAngeles1,
                     image: image,
+                    focalLength: 70,
                     iso: 800,
                     shutterSpeed: 30,
                     aperture: 16,
@@ -66,6 +70,7 @@ final class HaebitLoggerTests: XCTestCase {
                     date: Date(timeIntervalSince1970: 1707112990),
                     coordinate: losAngeles2,
                     image: image,
+                    focalLength: 200,
                     iso: 800,
                     shutterSpeed: 60,
                     aperture: 2,
@@ -76,6 +81,7 @@ final class HaebitLoggerTests: XCTestCase {
                     date: Date(timeIntervalSince1970: 1707210210),
                     coordinate: losAngeles3,
                     image: image,
+                    focalLength: 50,
                     iso: 800,
                     shutterSpeed: 8,
                     aperture: 22,
@@ -115,6 +121,13 @@ final class HaebitLoggerTests: XCTestCase {
         let logger = HaebitLogger(repository: repository)
         let logs = try await logger.logs(aperture: 2)
         XCTAssertEqual(logs.count, 2)
+    }
+    
+    func testLogsWithFocalLength() async throws {
+        let repository = MockRepository()
+        let logger = HaebitLogger(repository: repository)
+        let logs = try await logger.logs(focalLength: 70)
+        XCTAssertEqual(logs.count, 1)
     }
     
     func testLogsWithISO() async throws {
@@ -173,7 +186,8 @@ final class HaebitLoggerTests: XCTestCase {
                 id: UUID(),
                 date: Date(),
                 coordinate: HaebitCoordinate(latitude: .zero, longitude: .zero),
-                image: HaebitImage(photo: URL(string: "https://example.com")!, video: nil),
+                image: HaebitImage(photo: URL(string: "https://example.com")!, video: nil), 
+                focalLength: 50,
                 iso: 100,
                 shutterSpeed: 60,
                 aperture: 1.4,
