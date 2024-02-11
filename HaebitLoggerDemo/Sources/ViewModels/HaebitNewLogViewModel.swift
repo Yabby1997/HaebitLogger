@@ -32,7 +32,7 @@ final class HaebitNewLogViewModel: ObservableObject {
             HaebitLog(
                 date: date,
                 coordinate: .random(),
-                image: HaebitImage(photo: URL(string: "https://demo.com")!, video: nil),
+                image: HaebitLivePhoto(imagePath: "Test/TestImage.jpeg", videoPath: nil),
                 focalLength: focalLength,
                 iso: iso,
                 shutterSpeed: shutterSpeed,

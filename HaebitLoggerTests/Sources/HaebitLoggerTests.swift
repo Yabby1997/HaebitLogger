@@ -11,7 +11,7 @@ import XCTest
 
 final class HaebitLoggerTests: XCTestCase {
     class MockRepository: HaebitLogRepository {
-        let image = HaebitImage(photo: URL(string: "https://test.com")!, video: nil)
+        let image = HaebitLivePhoto(imagePath: "Test/TestImage.jpeg", videoPath: nil)
         let sanFrancisco = HaebitCoordinate(latitude: 37.7749, longitude: -122.4194)
         let sanFrancisco1 = HaebitCoordinate(latitude: 37.775051043038545, longitude: -122.41237811867396)
         let losAngeles = HaebitCoordinate(latitude: 34.0522, longitude: -118.2437)
@@ -186,7 +186,7 @@ final class HaebitLoggerTests: XCTestCase {
                 id: UUID(),
                 date: Date(),
                 coordinate: HaebitCoordinate(latitude: .zero, longitude: .zero),
-                image: HaebitImage(photo: URL(string: "https://example.com")!, video: nil), 
+                image: HaebitLivePhoto(imagePath: "Test/TestImage.jpeg", videoPath: nil),
                 focalLength: 50,
                 iso: 100,
                 shutterSpeed: 60,

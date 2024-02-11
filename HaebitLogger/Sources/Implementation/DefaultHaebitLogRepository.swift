@@ -62,7 +62,7 @@ extension NSManagedHaebitLog {
     fileprivate var haebitLog: HaebitLog? {
         guard let id,
               let date,
-              let image = image?.haebitImage,
+              let image = image?.haebitLivePhoto,
               let memo else {
             return nil
         }
@@ -92,10 +92,10 @@ extension NSManagedHaebitLog {
     }
 }
 
-extension NSManagedHaebitImage {
-    fileprivate var haebitImage: HaebitImage? {
-        guard let photo else { return nil }
-        return .init(photo: photo, video: video)
+extension NSManagedHaebitLivePhoto {
+    fileprivate var haebitLivePhoto: HaebitLivePhoto? {
+        guard let imagePath else { return nil }
+        return .init(imagePath: imagePath, videoPath: videoPath)
     }
 }
 
@@ -139,11 +139,11 @@ extension HaebitCoordinate {
     }
 }
 
-extension HaebitImage {
-    fileprivate func managedObject(with context: NSManagedObjectContext) -> NSManagedHaebitImage? {
-        guard let managedObject = NSManagedHaebitImage(with: context) else { return nil }
-        managedObject.photo = photo
-        managedObject.video = video
+extension HaebitLivePhoto {
+    fileprivate func managedObject(with context: NSManagedObjectContext) -> NSManagedHaebitLivePhoto? {
+        guard let managedObject = NSManagedHaebitLivePhoto(with: context) else { return nil }
+        managedObject.imagePath = imagePath
+        managedObject.videoPath = videoPath
         return managedObject
     }
 }

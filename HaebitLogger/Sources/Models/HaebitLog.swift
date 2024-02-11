@@ -12,7 +12,7 @@ public struct HaebitLog: Hashable {
     public let id: UUID
     public let date: Date
     public let coordinate: HaebitCoordinate?
-    public let image: HaebitImage
+    public let image: HaebitLivePhoto
     public let focalLength: UInt16
     public let iso: UInt16
     public let shutterSpeed: Float
@@ -23,7 +23,7 @@ public struct HaebitLog: Hashable {
         id: UUID = UUID(),
         date: Date,
         coordinate: HaebitCoordinate?,
-        image: HaebitImage,
+        image: HaebitLivePhoto,
         focalLength: UInt16,
         iso: UInt16,
         shutterSpeed: Float,
@@ -84,13 +84,15 @@ public struct HaebitCoordinate {
     }
 }
 
-public struct HaebitImage {
-    public let photo: URL
-    public let video: URL?
+public struct HaebitLivePhoto {
+    /// Relative path to image file from Home directory.
+    public let imagePath: String
+    /// Relative path to video file from Home directory.
+    public let videoPath: String?
     
-    public init(photo: URL, video: URL?) {
-        self.photo = photo
-        self.video = video
+    public init(imagePath: String, videoPath: String?) {
+        self.imagePath = imagePath
+        self.videoPath = videoPath
     }
 }
 

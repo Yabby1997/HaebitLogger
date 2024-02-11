@@ -4,9 +4,9 @@
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="NSManagedHaebitImage" representedClassName="NSManagedHaebitImage" syncable="YES" codeGenerationType="class">
-        <attribute name="photo" attributeType="URI"/>
-        <attribute name="video" optional="YES" attributeType="URI"/>
+    <entity name="NSManagedHaebitLivePhoto" representedClassName="NSManagedHaebitLivePhoto" syncable="YES" codeGenerationType="class">
+        <attribute name="imagePath" attributeType="String"/>
+        <attribute name="videoPath" optional="YES" attributeType="String"/>
     </entity>
     <entity name="NSManagedHaebitLog" representedClassName="NSManagedHaebitLog" syncable="YES" codeGenerationType="class">
         <attribute name="aperture" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -17,6 +17,6 @@
         <attribute name="memo" attributeType="String"/>
         <attribute name="shutterSpeed" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="coordinate" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NSManagedHaebitCoordinate"/>
-        <relationship name="image" maxCount="1" deletionRule="Nullify" destinationEntity="NSManagedHaebitImage"/>
+        <relationship name="image" maxCount="1" deletionRule="Nullify" destinationEntity="NSManagedHaebitLivePhoto"/>
     </entity>
 </model>

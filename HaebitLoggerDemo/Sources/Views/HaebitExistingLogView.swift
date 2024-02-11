@@ -72,7 +72,7 @@ struct HaebitExistingLogView: View {
                 id: UUID(),
                 date: Date(),
                 coordinate: .random(),
-                image: HaebitImage(photo: URL(string: "https://demo.com")!, video: nil),
+                image: HaebitLivePhoto(imagePath: "Test/TestImage.jpeg", videoPath: nil),
                 focalLength: .zero,
                 iso: .zero,
                 shutterSpeed: .zero,
