@@ -62,7 +62,8 @@ extension NSManagedHaebitLog {
     fileprivate var haebitLog: HaebitLog? {
         guard let id,
               let date,
-              let image = image?.haebitLivePhoto,
+              let assetIdentifier,
+              let thumbnailPath,
               let memo else {
             return nil
         }
@@ -71,7 +72,8 @@ extension NSManagedHaebitLog {
             id: id,
             date: date,
             coordinate: coordinate?.haebitCoordinate,
-            image: image,
+            assetIdentifier: assetIdentifier,
+            thumbnailPath: thumbnailPath,
             focalLength: UInt16(bitPattern: focalLength),
             iso: UInt16(bitPattern: iso),
             shutterSpeed: shutterSpeed,
@@ -83,19 +85,13 @@ extension NSManagedHaebitLog {
     fileprivate func override(with context: NSManagedObjectContext,  haebitLog: HaebitLog) {
         date = haebitLog.date
         coordinate = haebitLog.coordinate?.managedObject(with: context)
-        image = haebitLog.image.managedObject(with: context)
+        assetIdentifier = haebitLog.assetIdentifier
+        thumbnailPath = haebitLog.thumbnailPath
         focalLength = Int16(bitPattern: haebitLog.focalLength)
         iso = Int16(bitPattern: haebitLog.iso)
         shutterSpeed = haebitLog.shutterSpeed
         aperture = haebitLog.aperture
         memo = haebitLog.memo
-    }
-}
-
-extension NSManagedHaebitLivePhoto {
-    fileprivate var haebitLivePhoto: HaebitLivePhoto? {
-        guard let imagePath else { return nil }
-        return .init(imagePath: imagePath, videoPath: videoPath)
     }
 }
 
@@ -125,7 +121,8 @@ extension HaebitLog {
         managedObject.memo = memo
         managedObject.shutterSpeed = shutterSpeed
         managedObject.coordinate = coordinate?.managedObject(with: context)
-        managedObject.image = image.managedObject(with: context)
+        managedObject.assetIdentifier = assetIdentifier
+        managedObject.thumbnailPath = thumbnailPath
         return managedObject
     }
 }
@@ -135,15 +132,6 @@ extension HaebitCoordinate {
         guard let managedObject = NSManagedHaebitCoordinate(with: context) else { return nil }
         managedObject.latitude = latitude
         managedObject.longitude = longitude
-        return managedObject
-    }
-}
-
-extension HaebitLivePhoto {
-    fileprivate func managedObject(with context: NSManagedObjectContext) -> NSManagedHaebitLivePhoto? {
-        guard let managedObject = NSManagedHaebitLivePhoto(with: context) else { return nil }
-        managedObject.imagePath = imagePath
-        managedObject.videoPath = videoPath
         return managedObject
     }
 }

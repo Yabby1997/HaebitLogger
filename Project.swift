@@ -6,7 +6,7 @@ let targets: [Target] = [
         platform: .iOS,
         product: .framework,
         bundleId: "com.seunghun.haebitlogger",
-        deploymentTarget: .iOS(targetVersion: "15.0", devices: [.iphone]),
+        deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone]),
         sources: ["HaebitLogger/Sources/**"],
         resources: ["HaebitLogger/Resources/**"],
         dependencies: []
@@ -31,7 +31,7 @@ let targets: [Target] = [
         platform: .iOS,
         product: .app,
         bundleId: "com.seunghun.haebitlogger.demo",
-        deploymentTarget: .iOS(targetVersion: "15.0", devices: [.iphone]),
+        deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone]),
         infoPlist: .extendingDefault(with: ["UILaunchStoryboardName": "LaunchScreen"]),
         sources: ["HaebitLoggerDemo/Sources/**"],
         resources: ["HaebitLoggerDemo/Resources/**"],
