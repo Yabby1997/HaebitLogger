@@ -9,10 +9,12 @@
 import CoreData
 import Foundation
 
+/// Default implementation of ``HaebitLogRepository``.
 public final class DefaultHaebitLogRepository: HaebitLogRepository {
     private let persistentContainer: NSPersistentContainer
     private var context: NSManagedObjectContext { persistentContainer.viewContext }
     
+    /// Initializes new ``DefaultHaebitLogRepository`` isntance.
     public init() {
         let bundle = Bundle(for: DefaultHaebitLogRepository.self)
         guard let modelURL = bundle.url(forResource: "HaebitLoggerModels", withExtension: "momd"),
