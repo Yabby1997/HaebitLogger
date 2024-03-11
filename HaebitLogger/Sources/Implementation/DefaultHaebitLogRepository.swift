@@ -16,8 +16,7 @@ public final class DefaultHaebitLogRepository: HaebitLogRepository {
     
     /// Initializes new ``DefaultHaebitLogRepository`` isntance.
     public init() {
-        let bundle = Bundle(for: DefaultHaebitLogRepository.self)
-        guard let modelURL = bundle.url(forResource: "HaebitLoggerModels", withExtension: "momd"),
+        guard let modelURL = Bundle.module.url(forResource: "HaebitLoggerModels", withExtension: "momd"),
             let objectModel = NSManagedObjectModel(contentsOf: modelURL)else {
             fatalError("Failed to locate model file in the framework bundle.")
         }
