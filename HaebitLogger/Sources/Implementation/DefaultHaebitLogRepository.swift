@@ -12,7 +12,6 @@ import Foundation
 /// Default implementation of ``HaebitLogRepository``.
 public final actor DefaultHaebitLogRepository: HaebitLogRepository {
     private let persistentContainer: NSPersistentContainer
-    private var context: NSManagedObjectContext { persistentContainer.viewContext }
     
     /// Initializes new ``DefaultHaebitLogRepository`` isntance.
     public init() {
@@ -29,33 +28,68 @@ public final actor DefaultHaebitLogRepository: HaebitLogRepository {
     }
     
     public func logs() async throws -> [HaebitLog] {
-        try context.fetch(NSManagedHaebitLog.fetchRequest()).compactMap { $0.haebitLog }
+        try await withCheckedThrowingContinuation { continuation in
+            persistentContainer.performBackgroundTask { context in
+                do {
+                    let logs = try context.fetch(NSManagedHaebitLog.fetchRequest()).compactMap { $0.haebitLog }
+                    continuation.resume(returning: logs)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
     
     public func save(log: HaebitLog) async throws {
-        if let existingManagedObject = try fetch(with: log.id) {
-            existingManagedObject.override(with: context, haebitLog: log)
-        } else {
-            guard let newManagedObject = log.managedObject(with: context) else {
-                return
+        let existingManagedObject = try await fetch(with: log.id)
+        return try await withCheckedThrowingContinuation { continuation in
+            persistentContainer.performBackgroundTask { context in
+                if let existingManagedObject {
+                    existingManagedObject.override(with: context, haebitLog: log)
+                } else {
+                    guard let newManagedObject = log.managedObject(with: context) else {
+                        continuation.resume()
+                        return
+                    }
+                    context.insert(newManagedObject)
+                }
+                do {
+                    try context.save()
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
-            context.insert(newManagedObject)
         }
-        try context.save()
     }
     
     public func remove(log id: UUID) async throws {
-        guard let managedObject = try fetch(with: id) else {
-            return
+        let existingManagedObject = try await fetch(with: id)
+        return try await withCheckedThrowingContinuation { continuation in
+            persistentContainer.performBackgroundTask { context in
+                guard let existingManagedObject else {
+                    continuation.resume()
+                    return
+                }
+                context.delete(existingManagedObject)
+                do {
+                    try context.save()
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
         }
-        context.delete(managedObject)
-        try context.save()
     }
     
-    private func fetch(with id: UUID) throws -> NSManagedHaebitLog? {
-        let fetchRequest: NSFetchRequest<NSManagedHaebitLog> = NSManagedHaebitLog.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        return try context.fetch(fetchRequest).first
+    private func fetch(with id: UUID) async throws -> NSManagedHaebitLog? {
+        try await withCheckedThrowingContinuation { continuation in
+            persistentContainer.performBackgroundTask { context in
+                let fetchRequest: NSFetchRequest<NSManagedHaebitLog> = NSManagedHaebitLog.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+                continuation.resume(returning: try? context.fetch(fetchRequest).first)
+            }
+        }
     }
 }
 
