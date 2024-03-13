@@ -26,6 +26,6 @@ public protocol HaebitLogRepository {
     /// Removes a ``HaebitLog`` from data persistence.
     ///
     /// - Parameters:
-    ///     - log: A ``HaebitLog`` instance to remove.
-    func remove(log: HaebitLog) async throws
+    ///     - id: An unique identifier of ``HaebitLog`` instance to remove.
+    func remove(log id: UUID) async throws
 }

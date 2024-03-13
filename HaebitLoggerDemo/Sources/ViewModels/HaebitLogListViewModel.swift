@@ -27,7 +27,7 @@ final class HaebitLogListViewModel: ObservableObject {
     
     func didSelectRemove(of index: Int) {
         Task {
-            try? await logger.remove(log: logs[index])
+            try? await logger.remove(log: logs[index].id)
             try? await reload()
         }
     }

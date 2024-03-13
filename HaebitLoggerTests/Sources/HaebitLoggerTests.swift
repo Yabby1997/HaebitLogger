@@ -11,7 +11,7 @@ import XCTest
 
 final class HaebitLoggerTests: XCTestCase {
     class MockRepository: HaebitLogRepository {
-        let image = HaebitLivePhoto(imagePath: "Test/TestImage.jpeg", videoPath: nil)
+        let image = ""
         let sanFrancisco = HaebitCoordinate(latitude: 37.7749, longitude: -122.4194)
         let sanFrancisco1 = HaebitCoordinate(latitude: 37.775051043038545, longitude: -122.41237811867396)
         let losAngeles = HaebitCoordinate(latitude: 34.0522, longitude: -118.2437)
@@ -104,8 +104,8 @@ final class HaebitLoggerTests: XCTestCase {
             data.append(log)
         }
         
-        func remove(log: HaebitLog) async throws {
-            data.removeAll { $0 == log }
+        func remove(log id: UUID) async throws {
+            data.removeAll { $0.id == id }
         }
     }
     
@@ -186,7 +186,7 @@ final class HaebitLoggerTests: XCTestCase {
                 id: UUID(),
                 date: Date(),
                 coordinate: HaebitCoordinate(latitude: .zero, longitude: .zero),
-                image: HaebitLivePhoto(imagePath: "Test/TestImage.jpeg", videoPath: nil),
+                image: "",
                 focalLength: 50,
                 iso: 100,
                 shutterSpeed: 60,
@@ -207,7 +207,7 @@ final class HaebitLoggerTests: XCTestCase {
             XCTFail()
             return
         }
-        try await logger.remove(log: log)
+        try await logger.remove(log: log.id)
         let logs2 = try await logger.logs()
         XCTAssertEqual(logs2.count, 5)
     }

@@ -44,8 +44,8 @@ public final class DefaultHaebitLogRepository: HaebitLogRepository {
         try context.save()
     }
     
-    public func remove(log: HaebitLog) async throws {
-        guard let managedObject = try fetch(with: log.id) else {
+    public func remove(log id: UUID) async throws {
+        guard let managedObject = try fetch(with: id) else {
             return
         }
         context.delete(managedObject)

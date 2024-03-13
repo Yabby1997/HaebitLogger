@@ -123,8 +123,8 @@ public class HaebitLogger {
     /// Removes a ``HaebitLog``.
     ///
     /// - Parameters:
-    ///     - log: A ``HaebitLog`` instance to remove.
-    public func remove(log: HaebitLog) async throws {
-        try await repository.remove(log: log)
+    ///     - id: An unique identifier of ``HaebitLog`` instance to remove.
+    public func remove(log id: UUID) async throws {
+        try await repository.remove(log: id)
     }
 }
