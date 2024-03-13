@@ -10,7 +10,7 @@ import CoreData
 import Foundation
 
 /// Default implementation of ``HaebitLogRepository``.
-public final class DefaultHaebitLogRepository: HaebitLogRepository {
+public final actor DefaultHaebitLogRepository: HaebitLogRepository {
     private let persistentContainer: NSPersistentContainer
     private var context: NSManagedObjectContext { persistentContainer.viewContext }
     
