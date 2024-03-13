@@ -33,7 +33,12 @@ struct HaebitLogListView: View {
                 }
             }
         }
-        .onAppear(perform: viewModel.onAppear)
+        .onAppear {
+            for i in 0...100 {
+                viewModel.onAppear()
+                print(#function, i)
+            }
+        }
         .fullScreenCover(isPresented: $viewModel.isAddingNewLog) {
             HaebitNewLogView(viewModel: viewModel.newLogViewModel())
         }
